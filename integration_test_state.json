@@ -1,0 +1,18 @@
+{
+  "files": {
+    "/test/file1.txt": {
+      "file_path": "/test/file1.txt",
+      "total_bytes": 1024,
+      "downloaded_bytes": 1024,
+      "status": "completed",
+      "error_message": null,
+      "retry_count": 0,
+      "last_updated": "2025-09-02T23:06:10.879204"
+    }
+  },
+  "scan_completed": false,
+  "total_files_discovered": 0,
+  "total_bytes_discovered": 0,
+  "migration_start_time": "2025-09-02T22:01:59.121260",
+  "last_scan_time": null
+}

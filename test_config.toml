@@ -1,0 +1,34 @@
+[putio]
+oauth_token = "YOUR_PUTIO_OAUTH_TOKEN_HERE"
+api_base_url = "https://api.put.io/v2"
+
+[destination]
+base_path = "/path/to/your/nas/downloads"
+preserve_structure = true
+
+[download]
+connections = 4
+timeout = 30
+retry_limit = 3
+
+[filters]
+allowed_extensions = [ "mp4", "mkv", "avi", "mp3", "flac",]
+blocked_extensions = [ "tmp", "part",]
+
+[behavior]
+auto_confirm = false
+cleanup_after_download = false
+rescan_on_startup = true
+
+[state]
+file_path = "migration_state.json"
+save_frequency_seconds = 30
+
+[logging]
+level = "INFO"
+file_path = "migration.log"
+
+[advanced]
+api_requests_per_second = 5
+user_agent = "putio-migrator/0.1.0"
+use_fallback_downloader = true

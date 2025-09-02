@@ -1,0 +1,35 @@
+# Configuration for downloading only media files
+# Filters out everything except common video and audio formats
+
+[putio]
+oauth_token = "YOUR_PUTIO_OAUTH_TOKEN_HERE"
+
+[destination]
+base_path = "/mnt/nas/media"
+preserve_structure = true
+
+[filters]
+# Only download common media files
+allowed_extensions = [
+    # Video formats
+    "mp4", "mkv", "avi", "mov", "wmv", "flv", "webm", "m4v",
+    # Audio formats  
+    "mp3", "flac", "m4a", "aac", "wav", "ogg", "wma"
+]
+
+# Skip files larger than 10GB (probably corrupted or wrong format)
+max_file_size_gb = 10
+
+# Block temporary and partial files
+blocked_extensions = ["tmp", "part", "incomplete", "downloading"]
+
+[download]
+# Use more connections for faster media downloads
+connections = 8
+
+# Longer timeout for large media files
+timeout = 300
+
+[logging]
+level = "INFO"
+file_path = "media_migration.log"

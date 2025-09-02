@@ -1,0 +1,15 @@
+# Minimal Put.io to NAS Migration Configuration
+# This is the simplest configuration that will work
+
+[putio]
+oauth_token = "YOUR_PUTIO_OAUTH_TOKEN_HERE"
+
+[destination]
+base_path = "/tmp/test_nas"
+
+# All other settings will use defaults:
+# - 4 simultaneous connections
+# - 30 second timeout
+# - Preserve folder structure
+# - No file filtering
+# - INFO level logging to console

@@ -1,0 +1,75 @@
+# Put.io to NAS Migration Tool Configuration
+# Complete example with all available options
+
+[putio]
+# Your Put.io OAuth token (required)
+# Get this from https://app.put.io/account/oauth/settings
+oauth_token = "YOUR_PUTIO_OAUTH_TOKEN_HERE"
+
+# Put.io API base URL (default: https://api.put.io/v2)
+api_base_url = "https://api.put.io/v2"
+
+[destination]
+# Base path where files will be downloaded (required)
+base_path = "/path/to/your/nas/downloads"
+
+# Whether to preserve Put.io folder structure (default: true)
+preserve_structure = true
+
+[download]
+# Number of simultaneous connections for Axel (default: 4, range: 1-16)
+connections = 4
+
+# Download timeout in seconds (default: 30)
+timeout = 30
+
+# Number of retries for failed downloads (default: 3)
+retry_limit = 3
+
+[filters]
+# Maximum file size in GB (default: null = no limit)
+max_file_size_gb = 50
+
+# Only download files with these extensions (default: null = all files)
+# allowed_extensions = ["mp4", "mkv", "avi", "mp3", "flac", "m4a"]
+
+# Never download files with these extensions (default: null = allow all)
+blocked_extensions = ["tmp", "part", "incomplete"]
+
+# Path patterns to exclude (default: null)
+# excluded_paths = ["*/temp/*", "*/cache/*"]
+
+[behavior]
+# Automatically confirm downloads without prompting (default: false)
+auto_confirm = false
+
+# Delete files from Put.io after successful download (default: false)
+# WARNING: Be very careful with this option!
+cleanup_after_download = false
+
+# Rescan Put.io account on startup to find new files (default: true)
+rescan_on_startup = true
+
+[state]
+# Path to migration state file (default: migration_state.json)
+file_path = "migration_state.json"
+
+# How often to save state during migration in seconds (default: 30)
+save_frequency_seconds = 30
+
+[logging]
+# Log level: DEBUG, INFO, WARNING, ERROR (default: INFO)
+level = "INFO"
+
+# Log file path (default: null = console only)
+file_path = "migration.log"
+
+[advanced]
+# API requests per second limit (default: 5)
+api_requests_per_second = 5
+
+# User agent for HTTP requests (default: putio-migrator/0.1.0)
+user_agent = "putio-migrator/0.1.0"
+
+# Use requests fallback if Axel fails (default: true)
+use_fallback_downloader = true
