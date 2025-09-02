@@ -106,6 +106,13 @@ class MigrationOrchestrator:
             if len(pending_files) > 10:
                 print(f"This may take a while. You can interrupt with Ctrl+C to pause and resume later.")
             
+            # Show first few files to be downloaded
+            print(f"Next files to download:")
+            for j, f in enumerate(pending_files[:5]):
+                print(f"  {j+1}. {f.name} ({f.size / (1024*1024):.1f} MB)")
+            if len(pending_files) > 5:
+                print(f"  ... and {len(pending_files) - 5} more files")
+            
             self.logger.info(f"Starting download of {len(pending_files)} files")
             
             # Initialize download manager
@@ -130,9 +137,16 @@ class MigrationOrchestrator:
                     elapsed = time.time() - start_time
                     print(f"Progress: {progress_pct:.1f}% - Downloading {file_node.name} (elapsed: {elapsed:.0f}s)")
                     
-                    # Get download URL
+                    # Get download URL with timeout handling
                     print(f"  Getting download URL for {file_node.name}...")
-                    download_url = self.putio_client.get_download_url(file_node.file_id)
+                    try:
+                        download_url = self.putio_client.get_download_url(file_node.file_id)
+                        print(f"  Got download URL successfully")
+                    except Exception as e:
+                        print(f"  ✗ Failed to get download URL: {str(e)}")
+                        self.state.mark_file_failed(file_node.full_path, f"Failed to get download URL: {str(e)}")
+                        failed_files += 1
+                        continue
                     
                     # Download file
                     print(f"  Starting download of {file_node.name} ({file_node.size / (1024*1024):.1f} MB)...")
