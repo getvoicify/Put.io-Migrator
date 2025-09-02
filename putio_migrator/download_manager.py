@@ -115,12 +115,14 @@ class DownloadManager:
         
         try:
             self.logger.info(f"Starting Axel download: {file_node.name}")
+            self.logger.debug(f"Axel command: {' '.join(command)}")
             result = subprocess.run(
                 command,
                 capture_output=True,
                 text=True,
                 timeout=self.timeout + 5  # Add buffer for process overhead
             )
+            self.logger.debug(f"Axel completed with return code: {result.returncode}")
             
             if result.returncode != 0:
                 error_msg = f"Axel download failed (code {result.returncode}): {result.stderr}"

@@ -67,7 +67,7 @@ class PutioClient:
         
         for attempt in range(self.retry_limit + 1):
             try:
-                response = self.session.request(method, url, **kwargs)
+                response = self.session.request(method, url, timeout=30, **kwargs)
                 self.last_request_time = time.time()
                 
                 # Handle rate limiting

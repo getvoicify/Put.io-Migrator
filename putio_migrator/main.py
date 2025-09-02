@@ -102,6 +102,10 @@ class MigrationOrchestrator:
                     "skipped_files": 0
                 }
             
+            print(f"\nStarting download of {len(pending_files)} files...")
+            if len(pending_files) > 10:
+                print(f"This may take a while. You can interrupt with Ctrl+C to pause and resume later.")
+            
             self.logger.info(f"Starting download of {len(pending_files)} files")
             
             # Initialize download manager
@@ -116,33 +120,45 @@ class MigrationOrchestrator:
             completed_files = 0
             failed_files = 0
             
+            import time
+            start_time = time.time()
+            
             for i, file_node in enumerate(pending_files):
                 try:
                     # Report progress
                     progress_pct = (i / len(pending_files)) * 100
-                    print(f"Progress: {progress_pct:.1f}% - Downloading {file_node.name}")
+                    elapsed = time.time() - start_time
+                    print(f"Progress: {progress_pct:.1f}% - Downloading {file_node.name} (elapsed: {elapsed:.0f}s)")
                     
                     # Get download URL
+                    print(f"  Getting download URL for {file_node.name}...")
                     download_url = self.putio_client.get_download_url(file_node.file_id)
                     
                     # Download file
+                    print(f"  Starting download of {file_node.name} ({file_node.size / (1024*1024):.1f} MB)...")
                     result = download_manager.download_file(file_node, download_url)
                     
                     if result.success:
                         self.state.mark_file_completed(file_node.full_path, file_node.size)
                         completed_files += 1
+                        print(f"  ✓ Completed: {file_node.name}")
                         self.logger.info(f"Completed: {file_node.name}")
                     else:
                         self.state.mark_file_failed(file_node.full_path, result.error_message)
                         failed_files += 1
+                        print(f"  ✗ Failed: {file_node.name} - {result.error_message}")
                         self.logger.error(f"Failed: {file_node.name} - {result.error_message}")
                     
                     # Auto-save state periodically
                     self.state.maybe_auto_save()
                     
+                except KeyboardInterrupt:
+                    print(f"\n  Interrupted during {file_node.name}")
+                    raise  # Re-raise to be caught by outer handler
                 except Exception as e:
                     self.state.mark_file_failed(file_node.full_path, str(e))
                     failed_files += 1
+                    print(f"  ✗ Error: {file_node.name} - {str(e)}")
                     self.logger.error(f"Unexpected error for {file_node.name}: {str(e)}")
             
             # Final state save
